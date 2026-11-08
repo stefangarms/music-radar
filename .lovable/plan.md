@@ -5,7 +5,7 @@
 Die vorhandene Tabelle `profiles` wird erweitert, nicht gelöscht. `display_name`, `avatar_url` und `updated_at` bleiben für die unveränderte Profilseite erhalten. Es werden keine Nutzer, Paar-Einträge oder Demo-Daten angelegt.
 
 - `profiles`: eigene Zeile lesen, anlegen, ändern und löschen.
-- `presence`: eigene Zeile anlegen, ändern und löschen; **kein Client-SELECT**, entsprechend `docs/decisions.md`. Deine Vorgabe „nur eigene Zeile“ wird hier auf diese Schreibrechte angewendet.
+- `presence`: ausschließlich eigene Zeile lesen, anlegen, ändern und löschen. Das folgt deiner aktuellen Vorgabe „nur eigene Zeile“ und ermöglicht sichere Updates/Upserts. Es weicht bewusst von „kein Select“ in `docs/decisions.md` ab: Ohne SELECT-Zugriff können RLS-geschützte Client-Updates nicht zuverlässig ihre eigene Zeile erreichen.
 - `pairs`: nur die beiden Beteiligten dürfen lesen; keine Client-Schreibrechte oder Consent-Funktion in diesem Auftrag.
 - `current_media`: keine Client-Rechte und keine Client-Policies; ausschließlich Service Role.
 - Fehlende Profile werden bei erfolgreicher Anmeldung automatisch durch einen app-eigenen Auth-Lifecycle-Trigger angelegt. Der vorhandene Signup-Trigger bleibt erhalten. Wiederholungen verändern bestehende Profile nicht.
@@ -88,9 +88,12 @@ CREATE TABLE public.presence (
   observed_at timestamptz NOT NULL,
   updated_at timestamptz NOT NULL DEFAULT now()
 );
-GRANT INSERT, UPDATE, DELETE ON public.presence TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.presence TO authenticated;
 GRANT ALL ON public.presence TO service_role;
 ALTER TABLE public.presence ENABLE ROW LEVEL SECURITY;
+CREATE POLICY presence_read_own ON public.presence
+  FOR SELECT TO authenticated
+  USING ((SELECT auth.uid()) = user_id);
 CREATE POLICY presence_insert_own ON public.presence
   FOR INSERT TO authenticated
   WITH CHECK ((SELECT auth.uid()) = user_id);
