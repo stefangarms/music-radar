@@ -31,4 +31,6 @@ use the editor.
 
 - Private content routes live under the client-only `_authenticated` layout, which validates Supabase users and redirects to `/login`; navigation lives inside that layout to avoid exposing a signed-out shell.
 - Keep one root Supabase identity-change subscription; clear Query caches on sign-out to prevent protected data surviving sessions.
-- Profiles are provisioned by an Auth lifecycle trigger, with owner-only reads and updates; do not seed users or profiles from page loads.
+- Profiles are provisioned idempotently by app-owned Auth signup and successful-login lifecycle triggers, with owner-only access; never seed users or profiles from page loads, so missing profiles recover without client provisioning.
+- Application user foreign keys reference public.profiles with cascading deletion; only profiles references auth.users, keeping app-owned relationships separate from managed Auth tables.
+- Preserve existing profile columns when adding the documented model so database-only changes do not break the unchanged UI.
