@@ -14,26 +14,159 @@ export type Database = {
   }
   public: {
     Tables: {
+      current_media: {
+        Row: {
+          artist: string | null
+          observed_at: string
+          provider: string
+          state: string
+          title: string | null
+          url: string | null
+          user_id: string
+        }
+        Insert: {
+          artist?: string | null
+          observed_at: string
+          provider?: string
+          state: string
+          title?: string | null
+          url?: string | null
+          user_id: string
+        }
+        Update: {
+          artist?: string | null
+          observed_at?: string
+          provider?: string
+          state?: string
+          title?: string | null
+          url?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "current_media_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pairs: {
+        Row: {
+          consent_a: boolean
+          consent_b: boolean
+          created_at: string
+          id: string
+          user_a: string
+          user_b: string
+        }
+        Insert: {
+          consent_a?: boolean
+          consent_b?: boolean
+          created_at?: string
+          id?: string
+          user_a: string
+          user_b: string
+        }
+        Update: {
+          consent_a?: boolean
+          consent_b?: boolean
+          created_at?: string
+          id?: string
+          user_a?: string
+          user_b?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pairs_user_a_fkey"
+            columns: ["user_a"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pairs_user_b_fkey"
+            columns: ["user_b"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      presence: {
+        Row: {
+          accuracy_m: number
+          lat: number
+          lng: number
+          observed_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          accuracy_m: number
+          lat: number
+          lng: number
+          observed_at: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          accuracy_m?: number
+          lat?: number
+          lng?: number
+          observed_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "presence_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
+          alias: string
           avatar_url: string | null
+          bio: string | null
           created_at: string
           display_name: string | null
+          genres: string[]
           id: string
+          show_top_artists: boolean
+          top_artists: Json
+          top_artists_imported_at: string | null
           updated_at: string
         }
         Insert: {
+          alias?: string
           avatar_url?: string | null
+          bio?: string | null
           created_at?: string
           display_name?: string | null
+          genres?: string[]
           id: string
+          show_top_artists?: boolean
+          top_artists?: Json
+          top_artists_imported_at?: string | null
           updated_at?: string
         }
         Update: {
+          alias?: string
           avatar_url?: string | null
+          bio?: string | null
           created_at?: string
           display_name?: string | null
+          genres?: string[]
           id?: string
+          show_top_artists?: boolean
+          top_artists?: Json
+          top_artists_imported_at?: string | null
           updated_at?: string
         }
         Relationships: []
