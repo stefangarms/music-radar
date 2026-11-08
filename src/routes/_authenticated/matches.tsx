@@ -2,13 +2,15 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Heart } from "lucide-react";
 import { ScreenState } from "@/components/app/ScreenState";
 
-export const Route = createFileRoute("/matches")({
+export const Route = createFileRoute("/_authenticated/matches")({
   head: () => ({
     meta: [
       { title: "Matches – Music Radar" },
       { name: "description", content: "Deine musikalischen Matches im Überblick." },
       { property: "og:title", content: "Matches – Music Radar" },
       { property: "og:description", content: "Deine musikalischen Matches im Überblick." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: MatchesPage,

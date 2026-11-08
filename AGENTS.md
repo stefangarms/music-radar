@@ -28,3 +28,7 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+- Private content routes live under the client-only `_authenticated` layout, which validates Supabase users and redirects to `/login`; navigation lives inside that layout to avoid exposing a signed-out shell.
+- Keep one root Supabase identity-change subscription; clear Query caches on sign-out to prevent protected data surviving sessions.
+- Profiles are provisioned by an Auth lifecycle trigger, with owner-only reads and updates; do not seed users or profiles from page loads.
