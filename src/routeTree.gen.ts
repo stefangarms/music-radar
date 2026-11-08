@@ -10,19 +10,19 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as KarteRouteImport } from './routes/karte'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as MatchesRouteImport } from './routes/matches'
-import { Route as ProfilRouteImport } from './routes/profil'
+import { Route as AuthenticatedKarteRouteImport } from './routes/_authenticated/karte'
+import { Route as AuthenticatedMatchesRouteImport } from './routes/_authenticated/matches'
+import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const KarteRoute = KarteRouteImport.update({
-  id: '/karte',
-  path: '/karte',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -30,53 +30,64 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MatchesRoute = MatchesRouteImport.update({
+const AuthenticatedKarteRoute = AuthenticatedKarteRouteImport.update({
+  id: '/karte',
+  path: '/karte',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMatchesRoute = AuthenticatedMatchesRouteImport.update({
   id: '/matches',
   path: '/matches',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const ProfilRoute = ProfilRouteImport.update({
+const AuthenticatedProfilRoute = AuthenticatedProfilRouteImport.update({
   id: '/profil',
   path: '/profil',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/karte': typeof KarteRoute
   '/login': typeof LoginRoute
-  '/matches': typeof MatchesRoute
-  '/profil': typeof ProfilRoute
+  '/karte': typeof AuthenticatedKarteRoute
+  '/matches': typeof AuthenticatedMatchesRoute
+  '/profil': typeof AuthenticatedProfilRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/karte': typeof KarteRoute
   '/login': typeof LoginRoute
-  '/matches': typeof MatchesRoute
-  '/profil': typeof ProfilRoute
+  '/karte': typeof AuthenticatedKarteRoute
+  '/matches': typeof AuthenticatedMatchesRoute
+  '/profil': typeof AuthenticatedProfilRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/karte': typeof KarteRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/login': typeof LoginRoute
-  '/matches': typeof MatchesRoute
-  '/profil': typeof ProfilRoute
+  '/_authenticated/karte': typeof AuthenticatedKarteRoute
+  '/_authenticated/matches': typeof AuthenticatedMatchesRoute
+  '/_authenticated/profil': typeof AuthenticatedProfilRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/karte' | '/login' | '/matches' | '/profil'
+  fullPaths: '/' | '/login' | '/karte' | '/matches' | '/profil'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/karte' | '/login' | '/matches' | '/profil'
-  id: '__root__' | '/' | '/karte' | '/login' | '/matches' | '/profil'
+  to: '/' | '/login' | '/karte' | '/matches' | '/profil'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/login'
+    | '/_authenticated/karte'
+    | '/_authenticated/matches'
+    | '/_authenticated/profil'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  KarteRoute: typeof KarteRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   LoginRoute: typeof LoginRoute
-  MatchesRoute: typeof MatchesRoute
-  ProfilRoute: typeof ProfilRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -88,11 +99,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/karte': {
-      id: '/karte'
-      path: '/karte'
-      fullPath: '/karte'
-      preLoaderRoute: typeof KarteRouteImport
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -102,29 +113,49 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/matches': {
-      id: '/matches'
+    '/_authenticated/karte': {
+      id: '/_authenticated/karte'
+      path: '/karte'
+      fullPath: '/karte'
+      preLoaderRoute: typeof AuthenticatedKarteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/matches': {
+      id: '/_authenticated/matches'
       path: '/matches'
       fullPath: '/matches'
-      preLoaderRoute: typeof MatchesRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedMatchesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/profil': {
-      id: '/profil'
+    '/_authenticated/profil': {
+      id: '/_authenticated/profil'
       path: '/profil'
       fullPath: '/profil'
-      preLoaderRoute: typeof ProfilRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedProfilRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedKarteRoute: typeof AuthenticatedKarteRoute
+  AuthenticatedMatchesRoute: typeof AuthenticatedMatchesRoute
+  AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedKarteRoute: AuthenticatedKarteRoute,
+  AuthenticatedMatchesRoute: AuthenticatedMatchesRoute,
+  AuthenticatedProfilRoute: AuthenticatedProfilRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  KarteRoute: KarteRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   LoginRoute: LoginRoute,
-  MatchesRoute: MatchesRoute,
-  ProfilRoute: ProfilRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
