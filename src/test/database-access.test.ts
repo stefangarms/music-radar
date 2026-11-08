@@ -3,9 +3,9 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
-const schema = readFileSync(new URL("../../supabase/migrations/20261108165117_35e52cde-d0d9-4c41-a1c3-826f2cf32a70.sql", import.meta.url), "utf8");
-const original = readFileSync(new URL("../../supabase/migrations/20261108150228_86632ce6-1a86-4756-964a-5c0cb64b1bd7.sql", import.meta.url), "utf8");
-const grants = readFileSync(new URL("../../supabase/migrations/20261108170346_b0e54b9d-fa30-49dd-9f53-4f6c38fcd14f.sql", import.meta.url), "utf8");
+const schema = readFileSync("supabase/migrations/20261108165117_35e52cde-d0d9-4c41-a1c3-826f2cf32a70.sql", "utf8");
+const original = readFileSync("supabase/migrations/20261108150228_86632ce6-1a86-4756-964a-5c0cb64b1bd7.sql", "utf8");
+const grants = readFileSync("supabase/migrations/20261108170346_b0e54b9d-fa30-49dd-9f53-4f6c38fcd14f.sql", "utf8");
 const all = `${original}\n${schema}`;
 
 describe("Database access migration contracts", () => {
