@@ -29,14 +29,14 @@ describe("Private Anmeldung", () => {
     auth.getUser.mockResolvedValue({ data: { user: null }, error: null });
     const beforeLoad = gate.options.beforeLoad;
     if (typeof beforeLoad !== "function") throw new Error("Missing guard");
-    await expect(beforeLoad({} as Parameters<typeof beforeLoad>[0])).rejects.toMatchObject({ options: { to: "/login", replace: true } });
+    await expect(beforeLoad({} as NonNullable<Parameters<typeof beforeLoad>[0]>)).rejects.toMatchObject({ options: { to: "/login", replace: true } });
   });
 
   it("permits a validated signed-in user", async () => {
     auth.getUser.mockResolvedValue({ data: { user: { id: "existing-user" } }, error: null });
     const beforeLoad = gate.options.beforeLoad;
     if (typeof beforeLoad !== "function") throw new Error("Missing guard");
-    expect(await beforeLoad({} as Parameters<typeof beforeLoad>[0])).toEqual({ user: { id: "existing-user" } });
+    expect(await beforeLoad({} as NonNullable<Parameters<typeof beforeLoad>[0]>)).toEqual({ user: { id: "existing-user" } });
   });
 
   it("clears the Supabase session on logout", async () => {
