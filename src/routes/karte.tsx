@@ -15,5 +15,7 @@ export const Route = createFileRoute("/karte")({
 });
 
 function KartePage() {
-  return <ScreenState title="Karte" emptyText="Die Karte wird hier bald angezeigt." icon={<MapPin className="h-7 w-7" />} />;
+  return (
+    <ScreenState title="Karte" emptyText="Test Karte wird hier bald angezeigt." icon={<MapPin className="h-7 w-7" />} />
+  );
 }
