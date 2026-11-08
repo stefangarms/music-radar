@@ -1,5 +1,12 @@
 # Anmeldung
 
+## Datenmodell
+- [ ] Spaltenvorgaben aus docs/decisions.md erhalten (Datei fehlt im Projekt).
+- [ ] SQL für profiles, pairs, presence und current_media mit RLS zur Prüfung zeigen, danach Migration ausführen.
+- [ ] Automatische Anlage fehlender eigener Profile beim ersten Login implementieren und testen; Oberfläche unverändert lassen.
+
+## Bestehende Anmeldung
+
 - [x] E-Mail/Passwort-Anmeldung und geschützte Seiten
 - [x] Private Profildaten und Abmeldung
 - [x] Automatische Tests und Prüfung der Weiterleitungen ohne Anmeldung
